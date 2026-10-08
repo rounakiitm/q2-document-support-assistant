@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Support Desk — Document-Aware Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Source+Sans+3:wght@400;550;650;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app.css?v=4"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="nav">
+    <div class="brand">
+      <div class="logo">SD</div>
+      <div>
+        <h1>Support Desk</h1>
+        <p>verified citations · session memory</p>
+      </div>
+    </div>
+
+    <div class="navsection sessionpanel">
+      <div class="sessionhead">
+        <span class="sectionlabel">Sessions</span>
+        <button id="newSession" class="ghost sm" type="button">+ New</button>
+      </div>
+      <div id="sessionList" class="sessionlist"><div class="muted">Loading…</div></div>
+    </div>
+
+    <div class="navfoot">
+      <div class="sectionlabel">Status</div>
+      <div class="footmeta">
+        <span id="modelBadge" class="badge">…</span>
+        <span id="usageTotals" class="muted"></span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="workspace">
+    <header class="topbar">
+      <nav class="pagenav">
+        <a href="#/chat" class="navlink active" data-page="chat">Chat</a>
+        <a href="#/kb" class="navlink" data-page="kb">Knowledge Base</a>
+        <a href="#/memory" class="navlink" data-page="memory">Memory</a>
+        <a href="#/about" class="navlink" data-page="about">About</a>
+      </nav>
+      <p id="sessionHint" class="muted sessionhint">No session yet</p>
+    </header>
+
+    <main>
+      <section id="page-chat" class="page active chatpage">
+        <div class="chatstage">
+          <div id="chat" class="chat"></div>
+          <div class="composer">
+            <div class="docbar slim">
+              <span class="muted">@ docs</span>
+              <div id="docChips" class="docchips"></div>
+            </div>
+            <details class="memstrip">
+              <summary>Session memory &amp; turn trace</summary>
+              <div class="memstrip-grid">
+                <div>
+                  <div class="sectionlabel">Live memory</div>
+                  <div id="memoryBox" class="muted">Nothing discussed yet.</div>
+                </div>
+                <div>
+                  <div class="sectionlabel">Last turn</div>
+                  <div id="turnTrace" class="muted">Tool calls and memory flags appear here.</div>
+                </div>
+              </div>
+            </details>
+            <div class="askwrap">
+              <div id="mentionMenu" class="mentionmenu" hidden></div>
+              <form id="askForm" class="askbar">
+                <input id="askInput" autocomplete="off" placeholder="Ask anything — type @ to focus one document, or search all…"/>
+                <button type="submit" id="askBtn">Send</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-kb" class="page">
+        <header class="pagehead">
+          <div>
+            <h2>Knowledge base</h2>
+            <p class="muted">Upload PDF, DOCX, or Markdown — parsed, chunked, embedded, and searchable live.</p>
+          </div>
+        </header>
+        <div class="kbgrid">
+          <div class="panel dropzone" id="dropZone">
+            <h3>Add document</h3>
+            <p class="muted">Drag &amp; drop here, or choose a file. Max size shown after health check.</p>
+            <input type="file" id="fileInput" accept=".pdf,.docx,.md,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/markdown"/>
+            <button id="ingestBtn" class="primarybtn" type="button">Ingest document</button>
+            <div id="ingestMsg"></div>
+          </div>
+          <div class="panel">
+            <div class="panelhead">
+              <h3>Indexed documents</h3>
+              <button id="refreshDocs" class="ghost sm" type="button">Refresh</button>
+            </div>
+            <div id="docList" class="doclist"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-memory" class="page">
+        <header class="pagehead">
+          <div>
+            <h2>Session memory</h2>
+            <p class="muted">Topics, asked questions, and the rolling summary for the active session.</p>
+          </div>
+        </header>
+        <div id="memoryPage" class="memgrid"></div>
+      </section>
+
+      <section id="page-about" class="page">
+        <header class="pagehead">
+          <div>
+            <h2>About</h2>
+            <p class="muted">How this assistant meets the evaluation requirements.</p>
+          </div>
+        </header>
+        <div class="aboutgrid">
+          <div class="panel">
+            <h3>What it does</h3>
+            <p>Answers from your uploaded documents using hybrid retrieval (dense + BM25, RRF fusion). Every citation is string-matched against indexed chunks before the answer ships.</p>
+          </div>
+          <div class="panel">
+            <h3>Memory behaviour</h3>
+            <p>Per-session topic ledger, asked-question log with embedding + LLM repeat detection, and a rolling summary so older turns stay compact without losing context.</p>
+          </div>
+          <div class="panel">
+            <h3>Honest fallbacks</h3>
+            <p>Low retrieval scores trigger an explicit not-in-KB path. Optional web search is labelled separately and never cited as knowledge-base evidence.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="app.js?v=4"></script>
+</body>
+</html>

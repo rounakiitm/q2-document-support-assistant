@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.git/
+.pytest_cache/
+.ruff_cache/
+logs/
+eval_report.md
+evals/
+tests/
+.github/
+data/agent.db
+data/chroma/
+data/uploads/
+agent-transcripts/

@@ -1,0 +1,28 @@
+fastapi>=0.115
+uvicorn[standard]>=0.32
+google-genai>=1.0
+pydantic-settings>=2.4
+streamlit>=1.40
+requests>=2.32
+python-multipart>=0.0.9
+pyyaml>=6.0
+httpx>=0.27
+pytest>=8.0
+ruff>=0.6
+
+# LangChain RAG plumbing
+langchain-core>=0.3
+langchain-community>=0.3
+langchain-text-splitters>=0.3
+langchain-chroma>=0.1.4
+langchain-google-genai>=2.0
+chromadb>=0.5
+rank-bm25>=0.2.2
+
+# document parsing
+pypdf>=4.2
+python-docx>=1.1
+docx2txt>=0.8
+
+# sample-doc generation only
+fpdf2>=2.7

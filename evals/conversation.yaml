@@ -1,0 +1,56 @@
+# Scripted 12-turn conversation exercising every stated requirement.
+# Runs sequentially in ONE session so memory/state carries across turns.
+# check types:
+#   contains        - substrings that must appear in the answer
+#   citations_valid - answer has >=1 citation and all citations validate
+#   not_in_kb       - answer.not_in_kb is true
+#   compressed      - answer.compressed is true (re-ask handled without repeat)
+#   topic_switch_ack- answer.topic_switch_ack is true
+#   no_verbatim_repeat - token overlap with turn N's answer stays below max_jaccard
+#   covers_prior    - mentions >= min_mentions of the listed prior topics
+- turn: 1
+  q: "What is the free look period for the Apex Term Assurance policy?"
+  check: { type: contains_any, expected: ["15 days", "fifteen days", "fifteen"] }
+  also: citations_valid
+- turn: 2
+  q: "And how long do I have to pay the premium after the due date?"
+  check: { type: contains, expected: ["30 days"] }
+  also: citations_valid
+- turn: 3
+  q: "Let me ask that differently - how long is the free look window?"
+  check: { type: compressed }
+  also: [citations_valid, { type: no_verbatim_repeat, of_turn: 1, max_jaccard: 0.6 }]
+- turn: 4
+  q: "How do I register a NACH mandate for premium payments?"
+  check: { type: contains, expected: ["IFSC"] }
+  also: [citations_valid, topic_switch_ack]
+- turn: 5
+  q: "What if I want to change the bank account on that mandate?"
+  check: { type: contains, expected: ["mandate"] }
+  also: citations_valid
+- turn: 6
+  q: "What is the decision timeline for investigated claims?"
+  check: { type: contains, expected: ["30 working days"] }
+  also: citations_valid
+- turn: 7
+  q: "Who receives the death benefit if the nominee is my child?"
+  check: { type: contains, expected: ["Section 39"] }
+  also: citations_valid
+- turn: 8
+  q: "What is the waiting period for dental treatment cover?"
+  check: { type: not_in_kb }
+- turn: 9
+  q: "Which documents do I need for a death claim?"
+  check: { type: contains, expected: ["death certificate"] }
+  also: citations_valid
+- turn: 10
+  q: "What have we covered so far in this conversation?"
+  check: { type: covers_prior, topics: ["free look", "nach", "claim", "grace", "nominee"], min_mentions: 2 }
+- turn: 11
+  q: "Under FATCA, which indicia trigger a review?"
+  check: { type: contains, expected: ["US"] }
+  also: citations_valid
+- turn: 12
+  q: "Back to the claims guide - within how many days must claim documents reach the company after intimation?"
+  check: { type: contains, expected: ["30 days"] }
+  also: citations_valid
